@@ -2,8 +2,34 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const connectDB = require("./db/connect");
+const Product = require("./models/product");
 
+const products_routes_post = require("./routes/products");
 
+app.post("/", async (req, res) => {
+  
+    
+    const userdata = new Product({
+      name: req.body.name,
+    price: req.body.price,
+    company: req.body.company,
+    rating: req.body.rating,
+    createdAt: req.body.createdAt,
+    company: req.body.company,
+      
+    });
+  
+    try {
+      const savedUserdata = await userdata.save();
+      res.send(savedUserdata);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  
+});
+
+// middleware or to set router
+app.use("/api/products", products_routes_post);
 
 const products_routes = require("./routes/products");
 
